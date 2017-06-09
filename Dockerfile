@@ -54,7 +54,6 @@ RUN apk --update add \
     ncurses-terminfo \
     python \
     openssh \
-    tmux \
 # YouCompleteMe
     && apk add --virtual build-deps \
     build-base \
