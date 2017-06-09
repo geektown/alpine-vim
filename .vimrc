@@ -25,7 +25,7 @@ map <leader>f :MRU<CR>
 """"""""""""""""""""""""""""""
 " => YankRing
 """"""""""""""""""""""""""""""
-let g:yankring_history_dir = '/home/developer/.vim_runtime/temp_dirs'
+let g:yankring_history_dir = '/root/.vim_runtime/temp_dirs'
 
 
 """"""""""""""""""""""""""""""

@@ -1,12 +1,14 @@
 FROM jare/alpine-vim:latest
 
+COPY repositories /etc/apk/repositories
+
 # User config
-ENV UID="1000" \
-    UNAME="developer" \
-    GID="1000" \
-    GNAME="developer" \
+ENV UID="0" \
+    UNAME="root" \
+    GID="0" \
+    GNAME="root" \
     SHELL="/bin/bash" \
-    UHOME=/home/developer
+    UHOME=/root
 
 # Used to configure YouCompleteMe
 ENV GOROOT="/usr/lib/go"
@@ -18,19 +20,7 @@ ENV PATH="$PATH:$GOBIN:$GOPATH/bin"
 RUN apk --no-cache add sudo \
 # Create HOME dir
     && mkdir -p "${UHOME}" \
-    && chown "${UID}":"${GID}" "${UHOME}" \
-# Create user
-    && echo "${UNAME}:x:${UID}:${GID}:${UNAME},,,:${UHOME}:${SHELL}" \
-    >> /etc/passwd \
-    && echo "${UNAME}::17032:0:99999:7:::" \
-    >> /etc/shadow \
-# No password sudo
-    && echo "${UNAME} ALL=(ALL) NOPASSWD: ALL" \
-    > "/etc/sudoers.d/${UNAME}" \
-    && chmod 0440 "/etc/sudoers.d/${UNAME}" \
-# Create group
-    && echo "${GNAME}:x:${GID}:${UNAME}" \
-    >> /etc/group
+    && chown "${UID}":"${GID}" "${UHOME}" 
 
 # Install Pathogen
 RUN apk --no-cache add curl \
@@ -46,9 +36,7 @@ RUN apk --no-cache add curl \
     && echo "syntax on " \
     >> $UHOME/.vimrc \
     && echo "filetype plugin indent on " \
-    >> $UHOME/.vimrc \
-# Cleanup
-    && apk del curl
+    >> $UHOME/.vimrc 
 
 # Vim wrapper
 COPY run /usr/local/bin/
@@ -65,6 +53,8 @@ RUN apk --update add \
     git \
     ncurses-terminfo \
     python \
+    openssh \
+    tmux \
 # YouCompleteMe
     && apk add --virtual build-deps \
     build-base \
@@ -161,9 +151,18 @@ RUN  mv -f $UHOME/.vimrc $UHOME/.vimrc~ \
 # Pathogen help tags generation
 RUN vim -E -c 'execute pathogen#helptags()' -c q ; return 0
 
+RUN export PATH=$PATH:$GOROOT/bin:$GOPATH/bin:$GOBIN \
+    && cd ~ \
+    && echo "let g:pathogen_disabled = [$DISABLE]" > .vimrc \
+    && echo "execute pathogen#infect('/ext/bundle/{}')" >> .vimrc \
+    && mkdir -p ~/.vim_runtime/temp_dirs \
+    && cat .vimrc~ >> .vimrc \
+    && echo "source /ext/.vimrc" >> .vimrc
 ENV TERM=xterm-256color
 
 # List of Vim plugins to disable
 ENV DISABLE=""
 
-ENTRYPOINT ["sh", "/usr/local/bin/run"]
+WORKDIR $GOPATH
+
+ENTRYPOINT ["bash"]
