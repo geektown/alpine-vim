@@ -1,3 +1,9 @@
+#### changed
+
++ use root in bash command.
++ add openssh, you can use ssh.
++ add tmux
+
 #### `jare/vim-bundle:latest`   
 
 [![](http://i.imgur.com/G6KybVM.png)](http://i.imgur.com/G6KybVM.png) 
