@@ -2,7 +2,6 @@
 
 + use root in bash command.
 + add openssh, you can use ssh.
-+ add tmux
 
 #### `jare/vim-bundle:latest`   
 
