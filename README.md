@@ -2,6 +2,7 @@
 
 + use root in bash command.
 + add openssh, you can use ssh.
++ use oh-my-zsh as default shell
 
 #### `jare/vim-bundle:latest`   
 
