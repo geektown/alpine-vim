@@ -162,6 +162,20 @@ ENV TERM=xterm-256color
 # List of Vim plugins to disable
 ENV DISABLE=""
 
+RUN apk --update --upgrade add zsh
+
+RUN cd ~ \
+    && git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh \
+    && cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+
+#set zsh as default shell
+ENV SHELL=/bin/zsh
+
+# cleanup and settings
+RUN rm -rf /var/cache/apk/* \
+    && find / -type f -iname \*.apk-new -delete \
+    && rm -rf /var/cache/apk/*
+
 WORKDIR $GOPATH
 
-ENTRYPOINT ["bash"]
+ENTRYPOINT ["zsh"]
