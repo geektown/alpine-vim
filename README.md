@@ -1,9 +1,19 @@
-#### changed
+#### changes
 
 + use root in bash command.
 + add openssh, you can use ssh.
 + use oh-my-zsh as default shell
 
+#### build and use
+```shell
+docker build -t docker-coder . # build
+
+alias work='docker run --rm -ti -v $(pwd):/root/workspace docker-coder' # alias for convenient
+
+work # just goto your work dir and type work, enjoy coding!!!
+```
+
+--------------------------------
 #### `jare/vim-bundle:latest`   
 
 [![](http://i.imgur.com/G6KybVM.png)](http://i.imgur.com/G6KybVM.png) 
